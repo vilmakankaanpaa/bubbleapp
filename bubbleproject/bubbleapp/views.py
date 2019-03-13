@@ -16,4 +16,4 @@ def register(request):
         form = UserCreationForm()
 
         args = {'form': form}
-        return render(request, 'bubbleapp/req_from.html', args)
+        return render(request, 'bubbleapp/req_form.html', args)
