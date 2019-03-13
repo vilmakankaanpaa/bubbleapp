@@ -27,15 +27,15 @@ $  brew tap heroku/brew
 $  brew install heroku/brew/heroku
 ````
 PotgreSQL
-
+````
 $  brew install postgres
 $  initdb/usr/local/var
 $  brew cask install pgadmin4
+````
 
 ## Virtual environment requirements
 
 - django
-- pylint-django (if using visual studio code, this understand django better than normal pylint)
 - gunicorn
 - django-heroku
 - requests
