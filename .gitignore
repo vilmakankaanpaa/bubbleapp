@@ -1,3 +1,4 @@
 .env
 htvenv
 .DS_Store
+.vscode
