@@ -1,18 +1,17 @@
-<html>
-    <head>
-        <title>Login</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-        crossorigin="anonymous">
+{% extends 'base.html'%}
 
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'bubbleapp/style.css' %}" type="text/css">
-    </head>
-    <body>
-        <div class="container">
-            <h1>Welcome</h1>
-            Welcome, you can login here
-            <button class="btn btn-default" type="button" name="button">Login</button>
-        </div>
-    </body>
-</html>
+{% block body %}
+<div class="container">
+    <h1>Welcome</h1>
+    <p>
+        You can log in here!
+    </p>
+    <h2>Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+{% endblock%}
