@@ -3,3 +3,4 @@ htvenv
 .DS_Store
 .vscode
 *.pyc
+db.sqlite3
