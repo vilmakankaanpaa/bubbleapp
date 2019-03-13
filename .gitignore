@@ -2,3 +2,4 @@
 htvenv
 .DS_Store
 .vscode
+*.pyc
