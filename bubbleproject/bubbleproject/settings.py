@@ -122,11 +122,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Activate Django-heroku
+django_heroku.settings(locals())
+
 # See https://github.com/heroku/django-heroku/issues/10
 ssl_require = os.environ['DJANGO_ENV'] == 'production'
 
 # Parse DATABASE_URL variable for Django
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=ssl_require)
-
-# Activate Django-heroku
-django_heroku.settings(locals())
