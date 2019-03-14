@@ -9,24 +9,72 @@ from django.contrib.auth.decorators import login_required
 from .models import Hashtag, Account
 from .forms import (
     RegistrationForm,
-    EditProfileForm
+    EditProfileForm,
+    HashtagForm
 )
+
+import datetime
 
 # Create your views here.
 
-@login_required
-def detail(request, hashtag_id):
-    hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
-    return render(request, 'bubbleapp/detail.html', {'hashtag': hashtag})
-
-@login_required
-def feed(request):
-    my_hashtags = Hashtag.objects.order_by('-add_date')
-    args = { 'my_hashtags': my_hashtags}
-    return render(request, 'bubbleapp/feed.html', args)
-
 def index(request):
     return render(request, 'bubbleapp/index.html', {})
+
+@login_required
+def detail(request, hashtag_id):
+
+    hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
+    data = {
+        'name': hashtag.name,
+        'hashtag': hashtag.hashtag
+    }
+    if request.method == 'POST':
+        form = HashtagForm(request.POST, initial=data)
+        if form.is_valid():
+            if form.has_changed():
+                hashtag.name = form.cleaned_data['name']
+                hashtag.hashtag = form.cleaned_data['hashtag']
+                hashtag.modified = datetime.datetime.now()
+                hashtag.save()
+
+            return redirect('/bubbleapp/feed/settings')
+
+    else:
+        form = HashtagForm(initial=data)
+        args = { 'form': form }
+        return render(request, 'bubbleapp/detail.html', args)
+
+@login_required
+def delete_hashtag(request, hashtag_id):
+    hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
+    if request.method == 'POST':
+        hashtag.delete()
+        return redirect('/bubbleapp/feed/settings')
+    else:
+        args = { 'hashtag': hashtag }
+        return render(request, 'bubbleapp/delete_hashtag.html', args)
+
+@login_required
+def feed_view(request):
+    return render(request, 'bubbleapp/feed.html', {})
+
+@login_required
+def feed_settings(request):
+
+    if request.method == 'POST':
+        form = HashtagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/bubbleapp/feed/settings')
+
+    else:
+        my_hashtags = Hashtag.objects.order_by('-modified')
+        form = HashtagForm()
+        args = {
+            'my_hashtags': my_hashtags,
+            'form': form
+        }
+        return render(request, 'bubbleapp/feed_settings.html', args)
 
 # Account management views
 
@@ -46,8 +94,7 @@ def edit_profile(request):
 
     else:
         form = EditProfileForm(instance=request.user)
-        args = {'form': form}
-        return render(request, 'bubbleapp/edit_profile.html', args)
+        return render(request, 'bubbleapp/edit_profile.html', {'form': form})
 
 def register(request):
     if request.method == 'POST':

@@ -11,12 +11,14 @@ from django.contrib.auth.views import (
 
 urlpatterns = [
   path('', views.index, name='index'),
-  path('<int:hashtag_id>/', views.detail, name='detail'),
-  path('feed/', views.feed, name='feed'),
+  path('feed/<int:hashtag_id>/', views.detail, name='detail'),
+  path('feed/delete_hashtag/<int:hashtag_id>/', views.delete_hashtag, name='delete_hashtag'),
+  path('feed/', views.feed_view, name='feed_view'),
+  path('feed/settings/', views.feed_settings, name='feed_settings'),
 
   # user profile
-  path('login/', LoginView.as_view(template_name='bubbleapp/login.html')),
-  path('logout/', LogoutView.as_view(template_name='bubbleapp/logout.html')),
+  path('login/', LoginView.as_view(template_name='bubbleapp/login.html'), name='login'),
+  path('logout/', LogoutView.as_view(template_name='bubbleapp/logout.html'), name='logout'),
   path('profile/', views.view_profile, name='view_profile'),
   path('profile/edit/', views.edit_profile, name='edit_profile'),
   path('register/', views.register, name='register'),
