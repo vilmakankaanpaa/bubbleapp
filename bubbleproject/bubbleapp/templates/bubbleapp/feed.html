@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+{% block body %}
+<div class="container">
+    <h1>Your feed</h1>
+</div>
+{% if my_hashtags %}
+<ul>
+    <div class="container">
+    {% for hashtag in my_hashtags %}
+    <li>{{hashtag.name}}</li>
+    {% endfor %}
+    </div>
+</ul>
+{% else %}
+<div class="container">
+<p>No hashtags added.</p>
+</div>
+{% endif %}
+{% endblock %}
