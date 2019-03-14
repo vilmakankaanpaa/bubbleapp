@@ -1,11 +1,11 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 
 from .models import Hashtag, Account
-from .forms import RegistrationForm
+from .forms import RegistrationForm, EditProfileForm
 
 # Create your views here.
 
@@ -21,9 +21,22 @@ def feed(request):
 def index(request):
     return render(request, 'bubbleapp/index.html', {})
 
-def profile(request):
+def view_profile(request):
     args = {'user': request.user}
     return render(request, 'bubbleapp/profile.html', args)
+
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            return redirect('/bubbleapp/profile')
+
+    else:
+        form = EditProfileForm(instance=request.user)
+        args = {'form': form}
+        return render(request, 'bubbleapp/edit_profile.html', args)
 
 def register(request):
     if request.method == 'POST':
