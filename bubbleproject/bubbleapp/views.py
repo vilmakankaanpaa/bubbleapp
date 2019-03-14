@@ -1,9 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 
 from .models import Hashtag, Account
+from .forms import RegistrationForm
 
 # Create your views here.
 
@@ -20,16 +22,17 @@ def index(request):
     return render(request, 'bubbleapp/index.html', {})
 
 def profile(request):
-    return render(request, 'bubbleapp/profile.html', {})
+    args = {'user': request.user}
+    return render(request, 'bubbleapp/profile.html', args)
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('/bubbleapp')
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
 
         args = {'form': form}
         return render(request, 'bubbleapp/req_form.html', args)

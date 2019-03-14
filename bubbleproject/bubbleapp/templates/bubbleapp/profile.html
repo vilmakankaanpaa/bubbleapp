@@ -2,6 +2,10 @@
 
 {% block body %}
 <div class="container">
-    <h1>Your profile</h1>
+    <h1>Your profile information</h1>
+    <p>Username: {{ user }}</p>
+    <p>First name: {{ user.first_name}}</p>
+    <p>Last name: {{ user.last_name }}</p>
+    <p>Email: {{ user.email }}</p>
 </div>
 {% endblock %}
