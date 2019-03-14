@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+
+{% block body %}
+
+<div class="container">
+    {% if my_hashtags %}
+    <p>Your hashtags: </p>
+    <ul>
+        <div class="container">
+        {% for hashtag in my_hashtags %}
+        <li>
+            {{ hashtag.name }} 
+            (<a href="{%  url 'detail' hashtag.id %}">#{{hashtag.hashtag}}</a>) 
+            <i>modified {{hashtag.modified}}</i> 
+            <a class="btn btn-outline-danger btn-sm" href="{% url 'delete_hashtag' hashtag.id %}" role="button">remove</a>
+        </li>
+        {% endfor %}
+        </div>
+    </ul>
+    {% else %}
+    <p>No hashtags added.</p>
+    {% endif %}
+</div>
+<br>
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-sm">Add hashtag</button>
+    </form>
+</div>
+
+{% endblock %}
