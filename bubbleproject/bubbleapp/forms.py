@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+from .models import Hashtag
+
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -37,3 +39,9 @@ class EditProfileForm(UserChangeForm):
             'last_name',
             'password'
         )
+
+class HashtagForm(forms.ModelForm):
+
+    class Meta:
+        model = Hashtag
+        fields = ('name', 'hashtag')
