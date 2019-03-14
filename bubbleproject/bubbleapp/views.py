@@ -1,11 +1,15 @@
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from .models import Hashtag, Account
-from .forms import RegistrationForm, EditProfileForm
+from .forms import (
+    RegistrationForm,
+    EditProfileForm
+)
 
 # Create your views here.
 
@@ -20,6 +24,8 @@ def feed(request):
 
 def index(request):
     return render(request, 'bubbleapp/index.html', {})
+
+# Account management views
 
 def view_profile(request):
     args = {'user': request.user}
@@ -49,3 +55,19 @@ def register(request):
 
         args = {'form': form}
         return render(request, 'bubbleapp/req_form.html', args)
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('/bubbleapp/profile')
+        else:
+            return redirect('/bubbleapp/profile/change-password')
+
+    else:
+        form = PasswordChangeForm(user=request.user)
+        args = {'form': form}
+        return render(request, 'bubbleapp/change_password.html', args)
