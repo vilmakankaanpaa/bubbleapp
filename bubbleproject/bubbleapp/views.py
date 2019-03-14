@@ -4,6 +4,7 @@ from django.template import loader
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
 
 from .models import Hashtag, Account
 from .forms import (
@@ -13,10 +14,12 @@ from .forms import (
 
 # Create your views here.
 
+@login_required
 def detail(request, hashtag_id):
     hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
     return render(request, 'bubbleapp/detail.html', {'hashtag': hashtag})
 
+@login_required
 def feed(request):
     my_hashtags = Hashtag.objects.order_by('-add_date')
     args = { 'my_hashtags': my_hashtags}
@@ -27,10 +30,12 @@ def index(request):
 
 # Account management views
 
+@login_required
 def view_profile(request):
     args = {'user': request.user}
     return render(request, 'bubbleapp/profile.html', args)
 
+@login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
@@ -56,6 +61,7 @@ def register(request):
         args = {'form': form}
         return render(request, 'bubbleapp/req_form.html', args)
 
+@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
