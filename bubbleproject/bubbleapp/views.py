@@ -97,7 +97,7 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('bubbleapp:index').lstrip('/'))
+            return redirect(reverse('bubbleapp:index'))
     else:
         form = RegistrationForm()
 
