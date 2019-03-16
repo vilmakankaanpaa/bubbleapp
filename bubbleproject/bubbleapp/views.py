@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
+from django.urls import reverse
+
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -20,7 +22,6 @@ import datetime
 def index(request):
     return render(request, 'bubbleapp/index.html', {})
 
-@login_required
 def detail(request, hashtag_id):
 
     hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
@@ -37,35 +38,32 @@ def detail(request, hashtag_id):
                 hashtag.modified = datetime.datetime.now()
                 hashtag.save()
 
-            return redirect('/bubbleapp/feed/settings')
+            return redirect(reverse('bubbleapp:feed_settings').lstrip('/'))
 
     else:
         form = HashtagForm(initial=data)
         args = { 'form': form }
         return render(request, 'bubbleapp/detail.html', args)
 
-@login_required
 def delete_hashtag(request, hashtag_id):
     hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
     if request.method == 'POST':
         hashtag.delete()
-        return redirect('/bubbleapp/feed/settings')
+        return redirect(reverse('bubbleapp:feed:settings').lstrip('/'))
     else:
         args = { 'hashtag': hashtag }
         return render(request, 'bubbleapp/delete_hashtag.html', args)
 
-@login_required
 def feed_view(request):
     return render(request, 'bubbleapp/feed.html', {})
 
-@login_required
 def feed_settings(request):
 
     if request.method == 'POST':
         form = HashtagForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/bubbleapp/feed/settings')
+            return redirect(reverse('bubbleapp:feed_settings').lstrip('/'))
 
     else:
         my_hashtags = Hashtag.objects.order_by('-modified')
@@ -78,19 +76,17 @@ def feed_settings(request):
 
 # Account management views
 
-@login_required
 def view_profile(request):
     args = {'user': request.user}
     return render(request, 'bubbleapp/profile.html', args)
 
-@login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, instance=request.user)
 
         if form.is_valid():
             form.save()
-            return redirect('/bubbleapp/profile')
+            return redirect(reverse('bubbleapp:profile').lstrip('/'))
 
     else:
         form = EditProfileForm(instance=request.user)
@@ -101,14 +97,13 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/bubbleapp')
+            return redirect(reverse('bubbleapp:index').lstrip('/'))
     else:
         form = RegistrationForm()
 
         args = {'form': form}
         return render(request, 'bubbleapp/req_form.html', args)
 
-@login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(data=request.POST, user=request.user)
@@ -116,9 +111,9 @@ def change_password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect('/bubbleapp/profile')
+            return redirect(reverse('bubbleapp:profile').lstrip('/'))
         else:
-            return redirect('/bubbleapp/profile/change-password')
+            return redirect(reverse('bubbleapp:change_password').lstrip('/'))
 
     else:
         form = PasswordChangeForm(user=request.user)

@@ -19,6 +19,6 @@ from bubbleproject import views
 
 urlpatterns = [
     path('', views.login_redirect, name='login_redirect'),
-    path('bubbleapp/', include('bubbleapp.urls')),
+    path('bubbleapp/', include('bubbleapp.urls', namespace='bubbleapp')),
     path('admin/', admin.site.urls),
 ]

@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'bubbleproject.middleware.LoginRequiredMiddleware'
 ]
 
 ROOT_URLCONF = 'bubbleproject.urls'
@@ -123,6 +124,15 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/bubbleapp/'
 LOGIN_URL = '/bubbleapp/login/'
+
+LOGIN_EXEMPT_URLS = (
+    'bubbleapp/register/',
+    'bubbleapp/logout/',
+    'bubbleapp/reset-password/',
+    'reset-password/done/',
+    'reset-password/confirm/',
+    'reset-password/complete/'
+)
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST='localhost'

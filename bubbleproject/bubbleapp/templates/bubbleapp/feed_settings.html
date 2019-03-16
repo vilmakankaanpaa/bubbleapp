@@ -9,10 +9,10 @@
         <div class="container">
         {% for hashtag in my_hashtags %}
         <li>
-            {{ hashtag.name }} 
-            (<a href="{%  url 'detail' hashtag.id %}">#{{hashtag.hashtag}}</a>) 
-            <i>modified {{hashtag.modified}}</i> 
-            <a class="btn btn-outline-danger btn-sm" href="{% url 'delete_hashtag' hashtag.id %}" role="button">remove</a>
+            {{ hashtag.name }}
+            (<a href="{%  url 'bubbleapp:detail' hashtag.id %}">#{{hashtag.hashtag}}</a>)
+            <i>modified {{hashtag.modified}}</i>
+            <a class="btn btn-outline-danger btn-sm" href="{% url 'bubbleapp:delete_hashtag' hashtag.id %}" role="button">remove</a>
         </li>
         {% endfor %}
         </div>
