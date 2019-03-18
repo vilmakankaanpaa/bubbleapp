@@ -3,33 +3,36 @@
 {% block body %}
 
 <div class="container">
-    <p>Request results: </p>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Alcohol by volume</th>
-            <th>Style</th>
-            <th>Category</th>
-            <th>Organic</th>
-            <th>Retired</th>
-            <th>Created</th>
-            <th>Updated</th>
-            <th>Glass</th>
-            <th>Description</th>
-        </tr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Alcohol by volume</th>
+                <th scope="col">Style</th>
+                <th scope="col">Category</th>
+                <th scope="col">Organic</th>
+                <th scope="col">Retired</th>
+                <th scope="col">Created</th>
+                <th scope="col">Updated</th>
+                <th scope="col">Glass</th>
+                <th scope="col" size=>Description</th>
+            </tr>
+        </thead>
         {% for beer in beers %}
-        <tr>
-            <td>{{ beer.name }}</td>
-            <td>{{ beer.abv }}</td>
-            <td>{{ beer.style }}</td>
-            <td>{{ beer.category }}</td>
-            <td>{{ beer.isOrganic }}</td>
-            <td>{{ beer.isRetired }}</td>
-            <td>{{ beer.createDate }}</td>
-            <td>{{ beer.updateDate }}</td>
-            <td>{{ beer.glassName }}</td>
-            <td>{{ beer.styleDescription }}</td>
-        </tr>
+        <tbody>
+            <tr>
+                <td>{{ beer.name }}</td>
+                <td>{{ beer.abv }}</td>
+                <td>{{ beer.style }}</td>
+                <td>{{ beer.category }}</td>
+                <td>{{ beer.isOrganic }}</td>
+                <td>{{ beer.isRetired }}</td>
+                <td>{{ beer.createDate }}</td>
+                <td>{{ beer.updateDate }}</td>
+                <td>{{ beer.glassName }}</td>
+                <td>{{ beer.styleDescription }}</td>
+            </tr>
+        </tbody>
         {% endfor %}
     </table>
 </div>
