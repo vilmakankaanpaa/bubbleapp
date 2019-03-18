@@ -16,3 +16,25 @@ class Account(models.Model):
 
     def __str__(self):
         return self.name
+
+class Beer(models.Model):
+    id = models.CharField(primary_key=True, max_length=50)
+    name = models.CharField('beer name', max_length=200)
+    abv = models.FloatField('Alcohol by volume')
+    style = models.ForeignKey('Style', on_delete=models.PROTECT)
+    isOrganic = models.BooleanField()
+    isRetired = models.BooleanField()
+    createDtae = models.DateField('Created')
+    updateDate = models.DateField('Updated')
+    glassName = models.CharField('Glass', max_length = 200)
+    styleDescription = models.TextField('Description')
+
+class Style(models.Model):
+    id = models.CharField(primary_key=True)
+    categoryName = models.ForeignKey('Category', on_delete=models.PROTECT)
+    styleName = models.CharField(max_length=200)
+    shortname =models.CharField(max_length=200)
+
+class Category(models.Model):
+    id = models.CharField(primary_key=True)
+    name = models.CharField(max_length=200)
