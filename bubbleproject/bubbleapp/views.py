@@ -8,12 +8,13 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-from .models import Hashtag, Account
+from .models import Hashtag, Account, Beer, Style, Category
 from .forms import (
     RegistrationForm,
     EditProfileForm,
     HashtagForm
 )
+from .collector import getBeers
 
 import datetime
 
@@ -119,3 +120,13 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user)
         args = {'form': form}
         return render(request, 'bubbleapp/change_password.html', args)
+
+def beers_view(request):
+
+    getBeers() # updates the database, should be done somewhere else
+    args = {
+        'beers': Beer.objects.all(),
+        'styles': Style.objects.all(),
+        'categories': Category.objects.all()
+    }
+    return render(request, 'bubbleapp/beers.html', args)
