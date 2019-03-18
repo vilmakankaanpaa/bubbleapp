@@ -1,0 +1,37 @@
+{% extends 'base.html'%}
+
+{% block body %}
+
+<div class="container">
+    <p>Request results: </p>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Alcohol by volume</th>
+            <th>Style</th>
+            <th>Category</th>
+            <th>Organic</th>
+            <th>Retired</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Glass</th>
+            <th>Description</th>
+        </tr>
+        {% for beer in beers %}
+        <tr>
+            <td>{{ beer.name }}</td>
+            <td>{{ beer.abv }}</td>
+            <td>{{ beer.style }}</td>
+            <td>{{ beer.category }}</td>
+            <td>{{ beer.isOrganic }}</td>
+            <td>{{ beer.isRetired }}</td>
+            <td>{{ beer.createDate }}</td>
+            <td>{{ beer.updateDate }}</td>
+            <td>{{ beer.glassName }}</td>
+            <td>{{ beer.styleDescription }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

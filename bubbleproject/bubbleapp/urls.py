@@ -31,5 +31,8 @@ urlpatterns = [
 
   path('reset-password/confirm/<slug:uidb64>/<slug:token>', PasswordResetConfirmView.as_view(template_name='bubbleapp/password_reset_confirm.html', success_url=reverse_lazy('bubbleapp:password_reset_complete')), name='password_reset_confirm'),
 
-  path('reset-password/complete/', PasswordResetCompleteView.as_view(template_name='bubbleapp/password_reset_complete.html'), name='password_reset_complete')
+  path('reset-password/complete/', PasswordResetCompleteView.as_view(template_name='bubbleapp/password_reset_complete.html'), name='password_reset_complete'),
+
+  # brewerydb
+  path('beers/', views.beers_view, name='beers')
 ]
