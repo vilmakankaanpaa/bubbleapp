@@ -14,7 +14,6 @@ urlpatterns = [
   path('', views.index, name='index'),
   path('feed/<int:hashtag_id>/', views.detail, name='detail'),
   path('feed/delete_hashtag/<int:hashtag_id>/', views.delete_hashtag, name='delete_hashtag'),
-  path('feed/', views.feed_view, name='feed_view'),
   path('feed/settings/', views.feed_settings, name='feed_settings'),
 
   # user profile

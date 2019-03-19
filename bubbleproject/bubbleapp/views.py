@@ -55,9 +55,6 @@ def delete_hashtag(request, hashtag_id):
         args = { 'hashtag': hashtag }
         return render(request, 'bubbleapp/delete_hashtag.html', args)
 
-def feed_view(request):
-    return render(request, 'bubbleapp/feed.html', {})
-
 def feed_settings(request):
 
     if request.method == 'POST':
