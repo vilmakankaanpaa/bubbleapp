@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+{% block body %}
+<div class="container">
+
+    {% if style %}
+    <p>Are you sure you want to remove style "{{style.beerStyle}}"?<p>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Remove style from favourites</button>
+    </form>
+    {% endif %}
+
+    {% if category %}
+    <p>Are you sure you want to remove category "{{category.beerCategory}}"?<p>
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Remove category from favourites</button>
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}

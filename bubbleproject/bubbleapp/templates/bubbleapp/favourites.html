@@ -3,31 +3,47 @@
 {% block body %}
 
 <div class="container">
-    {% if my_hashtags %}
-    <p>Your hashtags: </p>
-    <ul>
-        <div class="container">
-        {% for hashtag in my_hashtags %}
-        <li>
-            {{ hashtag.name }}
-            (<a href="{%  url 'bubbleapp:detail' hashtag.id %}">#{{hashtag.hashtag}}</a>)
-            <i>modified {{hashtag.modified}}</i>
-            <a class="btn btn-outline-danger btn-sm" href="{% url 'bubbleapp:delete_hashtag' hashtag.id %}" role="button">remove</a>
-        </li>
-        {% endfor %}
-        </div>
-    </ul>
-    {% else %}
-    <p>No hashtags added.</p>
-    {% endif %}
-</div>
-<br>
-<div class="container">
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-sm">Add hashtag</button>
-    </form>
-</div>
+    <!-- Favourite styles --->
+    <div class="container">
+        <h4>Your saved beer styles: </h4>
+        {% if styles %}
+        <ul>
+            {% for style in styles %}
+            <li>
+                {{ style.beerStyle }}
+                <i>modified {{ style.modified }}</i>
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'bubbleapp:delete_style' style.id %}" role="button">remove</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ styleForm.as_p }}
+            <input type="submit" value="Add a favourite style">
+        </form>
+    </div>
 
+    <!-- Favourite categories --->
+    <div class="container">
+        <h4>Your saved beer categories: </h4>
+        {% if categories %}
+        <p>Your categories: </p>
+        <ul>
+            {% for category in categories %}
+            <li>
+                {{ category.beerCategory }}
+                <i>modified {{ category.modified }}</i>
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'bubbleapp:delete_category' category.id %}" role="button">remove</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ categoryForm.as_p}}
+            <input type="submit" value="Add a category">
+        </form>
+    </div>
+</div>
 {% endblock %}

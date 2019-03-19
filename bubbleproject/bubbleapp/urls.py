@@ -12,8 +12,8 @@ from django.contrib.auth.views import (
 app_name = 'bubbleapp'
 urlpatterns = [
   path('', views.index, name='index'),
-  path('feed/<int:hashtag_id>/', views.detail, name='detail'),
-  path('feed/delete_hashtag/<int:hashtag_id>/', views.delete_hashtag, name='delete_hashtag'),
+  path('favourites/delete_category/<int:category_id>/', views.delete_favourite_category, name='delete_category'),
+  path('favourites/delete_style/<int:style_id>/', views.delete_favourite_style, name='delete_style'),
   path('favourites/', views.favourites, name='favourites'),
 
   # user profile
