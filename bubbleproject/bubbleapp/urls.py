@@ -14,7 +14,7 @@ urlpatterns = [
   path('', views.index, name='index'),
   path('feed/<int:hashtag_id>/', views.detail, name='detail'),
   path('feed/delete_hashtag/<int:hashtag_id>/', views.delete_hashtag, name='delete_hashtag'),
-  path('feed/settings/', views.feed_settings, name='feed_settings'),
+  path('favourites/', views.favourites, name='favourites'),
 
   # user profile
   path('login/', LoginView.as_view(template_name='bubbleapp/login.html'), name='login'),

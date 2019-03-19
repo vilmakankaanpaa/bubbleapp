@@ -55,13 +55,13 @@ def delete_hashtag(request, hashtag_id):
         args = { 'hashtag': hashtag }
         return render(request, 'bubbleapp/delete_hashtag.html', args)
 
-def feed_settings(request):
+def favourites(request):
 
     if request.method == 'POST':
         form = HashtagForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('bubbleapp:feed_settings').lstrip('/'))
+            return redirect(reverse('bubbleapp:favourites').lstrip('/'))
 
     else:
         my_hashtags = Hashtag.objects.order_by('-modified')
@@ -70,7 +70,7 @@ def feed_settings(request):
             'my_hashtags': my_hashtags,
             'form': form
         }
-        return render(request, 'bubbleapp/feed_settings.html', args)
+        return render(request, 'bubbleapp/favourites.html', args)
 
 # Account management views
 
