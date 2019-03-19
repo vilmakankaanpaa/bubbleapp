@@ -8,11 +8,12 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-from .models import Hashtag, Account, Beer, Style, Category
+from .models import FavouriteStyle, FavouriteCategory, Beer, Style, Category
 from .forms import (
     RegistrationForm,
     EditProfileForm,
-    HashtagForm
+    FavouriteStyleForm,
+    FavouriteCategoryForm
 )
 from .collector import getBeers
 
@@ -23,54 +24,74 @@ import datetime
 def index(request):
     return render(request, 'bubbleapp/index.html', {})
 
-def detail(request, hashtag_id):
+def delete_favourite_style(request, style_id):
 
-    hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
-    data = {
-        'name': hashtag.name,
-        'hashtag': hashtag.hashtag
-    }
+    fStyle = get_object_or_404(FavouriteStyle, pk=style_id)
+    print(fStyle.beerStyle)
+
     if request.method == 'POST':
-        form = HashtagForm(request.POST, initial=data)
-        if form.is_valid():
-            if form.has_changed():
-                hashtag.name = form.cleaned_data['name']
-                hashtag.hashtag = form.cleaned_data['hashtag']
-                hashtag.modified = datetime.datetime.now()
-                hashtag.save()
 
-            return redirect(reverse('bubbleapp:feed_settings').lstrip('/'))
+        fStyle.delete()
+        return redirect('/bubbleapp/favourites/')
 
     else:
-        form = HashtagForm(initial=data)
-        args = { 'form': form }
-        return render(request, 'bubbleapp/detail.html', args)
+        args = { 'style': fStyle }
+        return render(request, 'bubbleapp/delete_favourite.html', args)
 
-def delete_hashtag(request, hashtag_id):
-    hashtag = get_object_or_404(Hashtag, pk=hashtag_id)
+def delete_favourite_category(request, category_id):
+
+    fCategory = get_object_or_404(FavouriteCategory, pk=category_id)
+
     if request.method == 'POST':
-        hashtag.delete()
-        return redirect(reverse('bubbleapp:feed:settings').lstrip('/'))
+        fCategory.delete()
+        return redirect('/bubbleapp/favourites/')
+
     else:
-        args = { 'hashtag': hashtag }
-        return render(request, 'bubbleapp/delete_hashtag.html', args)
+        args = { 'category': fCategory }
+        return render(request, 'bubbleapp/delete_favourite.html', args)
 
 def favourites(request):
 
     if request.method == 'POST':
-        form = HashtagForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('bubbleapp:favourites').lstrip('/'))
+        styleForm = FavouriteStyleForm(request.POST)
+        categoryForm = FavouriteCategoryForm(request.POST)
+
+        if styleForm.is_valid():
+            selected_style = styleForm.cleaned_data['beerStyle']
+            style_object = Style.objects.get(styleName=selected_style)
+            styleForm.save(request.user, style_object)
+
+        if categoryForm.is_valid():
+            selected_category = categoryForm.cleaned_data['beerCategory']
+            category_object = Category.objects.get(name=selected_category)
+            categoryForm.save(request.user, category_object)
+
+        return redirect('/bubbleapp/favourites/')
 
     else:
-        my_hashtags = Hashtag.objects.order_by('-modified')
-        form = HashtagForm()
+        styles = FavouriteStyle.objects.filter(user=request.user)
+        styleForm = FavouriteStyleForm()
+
+        categories = FavouriteCategory.objects.filter(user=request.user)
+        categoryForm = FavouriteCategoryForm()
+
         args = {
-            'my_hashtags': my_hashtags,
-            'form': form
+            'styles': styles,
+            'styleForm': styleForm,
+            'categories': categories,
+            'categoryForm': categoryForm
         }
         return render(request, 'bubbleapp/favourites.html', args)
+
+def beers_view(request):
+
+    getBeers() # updates the database, should be done somewhere else
+    args = {
+        'beers': Beer.objects.all(),
+        'styles': Style.objects.all(),
+        'categories': Category.objects.all()
+    }
+    return render(request, 'bubbleapp/beers.html', args)
 
 # Account management views
 
@@ -117,13 +138,3 @@ def change_password(request):
         form = PasswordChangeForm(user=request.user)
         args = {'form': form}
         return render(request, 'bubbleapp/change_password.html', args)
-
-def beers_view(request):
-
-    getBeers() # updates the database, should be done somewhere else
-    args = {
-        'beers': Beer.objects.all(),
-        'styles': Style.objects.all(),
-        'categories': Category.objects.all()
-    }
-    return render(request, 'bubbleapp/beers.html', args)
