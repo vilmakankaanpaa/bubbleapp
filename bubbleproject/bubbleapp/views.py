@@ -53,6 +53,10 @@ def delete_favourite_category(request, category_id):
 
 def favourites(request):
 
+    # Dummy fix for now, since the dataset in API is not being updated ever. # # TODO: move this somewhere else
+    if Beer.objects.all() is None:
+        getBeers()
+
     if request.method == 'POST':
         styleForm = FavouriteStyleForm(request.POST)
         categoryForm = FavouriteCategoryForm(request.POST)
@@ -86,7 +90,10 @@ def favourites(request):
 
 def beers_view(request):
 
-    getBeers() # updates the database. should be done somewhere else
+    # Dummy fix for now, since the dataset in API is not being updated ever
+    # TODO: Move this somewhere else
+    if Beer.objects.all() is None:
+        getBeers()
 
     if request.method == 'POST':
 
@@ -97,11 +104,20 @@ def beers_view(request):
             style =  form.cleaned_data['styleFilter']
             category = form.cleaned_data['categoryFilter']
 
-            beers = Beer.objects.filter(style=style, category=category).order_by('-createDate')
+            if style and category:
+                beers = Beer.objects.filter(style=style, category=category).order_by('-createDate')
+            elif style is not None:
+                beers = Beer.objects.filter(style=style).order_by('-createDate')
+            elif Category is not None:
+                beers = Beer.objects.filter(category=category).order_by('-createDate')
+            else:
+                beers = Beer.objects.all().order_by('-createDate')
+
             args = {
                 'beers': beers,
                 'form' : form
             }
+
             return render(request, 'bubbleapp/beers.html', args)
 
     else:
@@ -125,7 +141,7 @@ def edit_profile(request):
 
         if form.is_valid():
             form.save()
-            return redirect(reverse('bubbleapp:profile').lstrip('/'))
+        return redirect(reverse('bubbleapp:profile').lstrip('/'))
 
     else:
         form = EditProfileForm(instance=request.user)
@@ -137,9 +153,15 @@ def register(request):
         if form.is_valid():
             form.save()
             return redirect(reverse('bubbleapp:index'))
+        else:
+            form = RegistrationForm()
+            args = {
+                'error': "There were errors on the field values",
+                'form': form
+            }
+            return render(request, 'bubbleapp/req_form.html', args)
     else:
         form = RegistrationForm()
-
         args = {'form': form}
         return render(request, 'bubbleapp/req_form.html', args)
 

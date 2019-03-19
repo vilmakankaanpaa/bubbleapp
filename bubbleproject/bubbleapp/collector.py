@@ -1,4 +1,4 @@
-import simplejson as simplejson
+import simplejson
 import requests
 from datetime import datetime
 from django.utils.timezone import make_aware
@@ -13,10 +13,7 @@ PAYLOAD = {
     'key':API_KEY
 }
 
-max_total_retrieved = 50
-
-# Example:
-#https://sandbox-api.brewerydb.com/v2/beers/?key=
+max_total_retrieved = 50 # dummy to use this but beers_in_total is not the real number of results
 
 # Get all beers in the database
 # Should probably change this to a method run every now and then to update the new beers, when it happnens (getting notifications of this from service, costs)
