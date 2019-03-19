@@ -1,21 +1,23 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Hashtag(models.Model):
-    name = models.CharField(max_length=200)
-    hashtag = models.CharField(max_length=100)
+class FavouriteStyle(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    beerStyle = models.ForeignKey('Style', on_delete=models.CASCADE)
     modified = models.DateTimeField('date modified', auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.beerStyle
 
-class Account(models.Model):
-    name = models.CharField(max_length=200)
-    user = models.CharField(max_length=100)
+class FavouriteCategory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    beerCategory = models.ForeignKey('Category', on_delete=models.CASCADE)
+    modified = models.DateTimeField('date modified', auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.beerCategory
 
 class Beer(models.Model):
     id = models.CharField(primary_key=True, max_length=50)
