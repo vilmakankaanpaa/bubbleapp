@@ -3,6 +3,11 @@
 {% block body %}
 
 <div class="container">
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Filter">
+    </form>
     <table class="table table-bordered">
         <thead>
             <tr>

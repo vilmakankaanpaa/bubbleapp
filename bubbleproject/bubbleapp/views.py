@@ -13,7 +13,8 @@ from .forms import (
     RegistrationForm,
     EditProfileForm,
     FavouriteStyleForm,
-    FavouriteCategoryForm
+    FavouriteCategoryForm,
+    FilterFieldForm
 )
 from .collector import getBeers
 
@@ -85,13 +86,32 @@ def favourites(request):
 
 def beers_view(request):
 
-    getBeers() # updates the database, should be done somewhere else
-    args = {
-        'beers': Beer.objects.all(),
-        'styles': Style.objects.all(),
-        'categories': Category.objects.all()
-    }
-    return render(request, 'bubbleapp/beers.html', args)
+    getBeers() # updates the database. should be done somewhere else
+
+    if request.method == 'POST':
+
+        form = FilterFieldForm(request.POST)
+
+        if form.is_valid():
+
+            style =  form.cleaned_data['styleFilter']
+            category = form.cleaned_data['categoryFilter']
+
+            beers = Beer.objects.filter(style=style, category=category).order_by('-createDate')
+            args = {
+                'beers': beers,
+                'form' : form
+            }
+            return render(request, 'bubbleapp/beers.html', args)
+
+    else:
+        form = FilterFieldForm()
+        beers = Beer.objects.all().order_by('-createDate')
+        args = {
+            'beers': beers,
+            'form' : form
+        }
+        return render(request, 'bubbleapp/beers.html', args)
 
 # Account management views
 

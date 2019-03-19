@@ -30,7 +30,6 @@ def getBeers():
     i = 0
     while i < max_total_retrieved:
 
-        print(i)
         data = result['data'][i]
         i += 1
         style_dict = data.get('style')

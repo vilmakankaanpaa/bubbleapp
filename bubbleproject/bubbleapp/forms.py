@@ -64,3 +64,7 @@ class FavouriteCategoryForm(forms.ModelForm):
         f_category.save()
 
         return f_category
+
+class FilterFieldForm(forms.Form):
+    styleFilter = forms.ModelChoiceField(queryset=Style.objects.all(), required=False)
+    categoryFilter = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)
